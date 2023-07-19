@@ -7,7 +7,7 @@ public class playerControler : MonoBehaviour
     private Rigidbody2D rb;
     private float horizontal;
     private float speed;
-    private bool jump = true;
+    private bool jump = false;
     private float jumpForce;
     private PlayerData playerData;
     void Start()
@@ -20,7 +20,7 @@ public class playerControler : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jump == false)
+        if (Input.GetKeyDown(KeyCode.Space) && !jump)
         {
             jumpFonction();
         }
