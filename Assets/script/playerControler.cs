@@ -10,12 +10,14 @@ public class playerControler : MonoBehaviour
     private bool jump = false;
     private float jumpForce;
     private PlayerData playerData;
+    private Animator animator;
     void Start()
     {
         playerData = GetComponent<PlayerData>();
         jumpForce = playerData.jumpForce;
         speed = playerData.speed;
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -27,9 +29,21 @@ public class playerControler : MonoBehaviour
     }
     void FixedUpdate()
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector3(horizontal * speed, rb.velocity.y, 0);
-
+        if (Input.GetKey(KeyCode.D))
+        { 
+            rb.velocity = new Vector3(speed, rb.velocity.y, 0);
+            animator.SetInteger("yon", 1);
+        }
+        else if (Input.GetKey(KeyCode.A))
+        { 
+            rb.velocity = new Vector3(-speed, rb.velocity.y, 0);
+            animator.SetInteger("yon", -1);
+        }
+        else
+        {
+            rb.velocity = new Vector3(0, 0, 0);
+            animator.SetInteger("yon", 0);
+        }
     }
 
     public void jumpFonction() // zýplama fonksiyonu
