@@ -43,6 +43,7 @@ public class playerControler : MonoBehaviour
         {
             botYonKontrol();
             BotHareket();
+            botPlayerControl();
         }
         else if (playerData.durum > 7)
         {
@@ -62,6 +63,17 @@ public class playerControler : MonoBehaviour
         }
 
 
+    }
+
+    void botPlayerControl()
+    {
+        if (((transform.position.x + (playerData.botDurum * 5) > playerData.playerGame.transform.position.x) &&
+            (transform.position.x < playerData.playerGame.transform.position.x)) ||
+            ((transform.position.x + (playerData.botDurum * 5) < playerData.playerGame.transform.position.x) &&
+            (transform.position.x > playerData.playerGame.transform.position.x)))
+            {
+            print("öldün");
+        }
     }
 
     void botYonKontrol()//botun x sýnýrlarýnda dönemsini saðlar
@@ -123,6 +135,7 @@ public class playerControler : MonoBehaviour
         animator.SetInteger("yon", 0);
         rb.velocity = new Vector3(0, rb.velocity.y, 0);
         print("vurdu");
+        GetComponent<FadeOutEffect>().play();
     }
 
     private void knifeAnim()
@@ -150,7 +163,6 @@ public class playerControler : MonoBehaviour
         if (collision.gameObject.CompareTag("zemin"))
         {
             jump = false;
-            Debug.Log("Çarpýþma algýlandý!");
         }
     }
 }
