@@ -11,6 +11,9 @@ public class playerControler : MonoBehaviour
     private float jumpForce;
     private PlayerData playerData;
     private Animator animator;
+
+    public GameObject kinfeL;
+    public GameObject kinfeR;
     void Start()
     {
         playerData = GetComponent<PlayerData>();
@@ -32,7 +35,7 @@ public class playerControler : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if (playerData.durum != -1)
+        if (playerData.durum == 1)
         {
             playerHaraket();
         }
@@ -41,11 +44,27 @@ public class playerControler : MonoBehaviour
             botYonKontrol();
             BotHareket();
         }
+        else if (playerData.durum > 7)
+        {
+            playerData.durum--;
+            playerData.knifeTransform.position += new Vector3(0.1f, 0, 0);
+
+        }
+        else if (playerData.durum > 2)
+        {
+            playerData.durum--;
+            playerData.knifeTransform.position -= new Vector3(0.1f, 0, 0);
+        }
+        else if (playerData.durum == 2)
+        {
+            playerData.knifeTransform.gameObject.SetActive(false);
+            playerData.durum = 1;
+        }
 
 
     }
 
-    void botYonKontrol()
+    void botYonKontrol()//botun x sýnýrlarýnda dönemsini saðlar
     {
         if (transform.position.x < playerData.botMinX)
         {
@@ -57,7 +76,7 @@ public class playerControler : MonoBehaviour
         }
     }
 
-    void BotHareket()
+    void BotHareket()//botun x eksenininde hereketini saðlar
     {
         if (playerData.botDurum == 1)
         {
@@ -70,17 +89,19 @@ public class playerControler : MonoBehaviour
         animator.SetInteger("yon", playerData.botDurum);
     }
 
-    void playerHaraket()
+    void playerHaraket()//playerin harektini saðlar
     {
         if (Input.GetKey(KeyCode.D))
         {
             rb.velocity = new Vector3(speed, rb.velocity.y, 0);
             playerData.yon = 1;
+            playerData.botDurum = 1;
         }
         else if (Input.GetKey(KeyCode.A))
         {
             rb.velocity = new Vector3(-speed, rb.velocity.y, 0);
             playerData.yon = -1;
+            playerData.botDurum = -1;
         }
         else
         {
@@ -96,7 +117,34 @@ public class playerControler : MonoBehaviour
         jump = true;
     }
 
+    public void botDead()
+    {
+        playerData.durum = -10;
+        animator.SetInteger("yon", 0);
+        rb.velocity = new Vector3(0, rb.velocity.y, 0);
+        print("vurdu");
+    }
 
+    private void knifeAnim()
+    {
+        if (playerData.botDurum == 1)
+            playerData.knifeTransform = kinfeL.transform;
+        else if (playerData.botDurum == -1)
+            playerData.knifeTransform = kinfeR.transform;
+        print("alýnan silah");
+        playerData.knifeTransform.gameObject.SetActive(true);
+        playerData.durum = 12;
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (Input.GetKey(KeyCode.F) && playerData.durum == 1)
+        { 
+            other.GetComponent<playerControler>().botDead();
+            knifeAnim();
+        }
+
+    }
     private void OnCollisionEnter2D(Collision2D collision) // zemine deyme kontrol
     {
         if (collision.gameObject.CompareTag("zemin"))

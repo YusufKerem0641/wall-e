@@ -14,4 +14,5 @@ public class PlayerData : MonoBehaviour
     public int botDurum;
     public int botMaxX;
     public int botMinX;
+    public Transform knifeTransform;
 }
