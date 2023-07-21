@@ -22,28 +22,72 @@ public class playerControler : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !jump)
+        if (playerData.durum != -1)
         {
-            jumpFonction();
+            if (Input.GetKeyDown(KeyCode.Space) && !jump)
+            {
+                jumpFonction();
+            }
         }
     }
     void FixedUpdate()
     {
-        if (Input.GetKey(KeyCode.D))
-        { 
+        if (playerData.durum != -1)
+        {
+            playerHaraket();
+        }
+        else if (playerData.durum == -1)
+        {
+            botYonKontrol();
+            BotHareket();
+        }
+
+
+    }
+
+    void botYonKontrol()
+    {
+        if (transform.position.x < playerData.botMinX)
+        {
+            playerData.botDurum = 1;
+        }
+        else if (transform.position.x > playerData.botMaxX)
+        {
+            playerData.botDurum = -1;
+        }
+    }
+
+    void BotHareket()
+    {
+        if (playerData.botDurum == 1)
+        {
             rb.velocity = new Vector3(speed, rb.velocity.y, 0);
-            animator.SetInteger("yon", 1);
+        }
+        else if (playerData.botDurum == -1)
+        {
+            rb.velocity = new Vector3(-speed, rb.velocity.y, 0);
+        }
+        animator.SetInteger("yon", playerData.botDurum);
+    }
+
+    void playerHaraket()
+    {
+        if (Input.GetKey(KeyCode.D))
+        {
+            rb.velocity = new Vector3(speed, rb.velocity.y, 0);
+            playerData.yon = 1;
         }
         else if (Input.GetKey(KeyCode.A))
-        { 
+        {
             rb.velocity = new Vector3(-speed, rb.velocity.y, 0);
-            animator.SetInteger("yon", -1);
+            playerData.yon = -1;
         }
         else
         {
-            rb.velocity = new Vector3(0, 0, 0);
-            animator.SetInteger("yon", 0);
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            playerData.yon = 0;
         }
+        animator.SetInteger("yon", playerData.yon);
     }
 
     public void jumpFonction() // zýplama fonksiyonu
