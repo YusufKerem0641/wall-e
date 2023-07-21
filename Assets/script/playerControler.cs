@@ -11,6 +11,7 @@ public class playerControler : MonoBehaviour
     private float jumpForce;
     private PlayerData playerData;
     private Animator animator;
+    private GameObject sonraki;
 
     public GameObject kinfeL;
     public GameObject kinfeR;
@@ -18,13 +19,14 @@ public class playerControler : MonoBehaviour
     {
         playerData = GetComponent<PlayerData>();
         jumpForce = playerData.jumpForce;
-        speed = playerData.speed;
+        
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
+        speed = playerData.speed;
         if (playerData.durum != -1)
         {
             if (Input.GetKeyDown(KeyCode.Space) && !jump)
@@ -59,7 +61,11 @@ public class playerControler : MonoBehaviour
         else if (playerData.durum == 2)
         {
             playerData.knifeTransform.gameObject.SetActive(false);
-            playerData.durum = 1;
+            sonraki.GetComponent<PlayerData>().durum = 1;
+            sonraki.GetComponent<PlayerData>().speed = 10;
+            sonraki.GetComponent<CapsuleCollider2D>().isTrigger = false;
+            sonraki.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+            botDead();
         }
 
 
@@ -152,9 +158,9 @@ public class playerControler : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other)
     {
         if (Input.GetKey(KeyCode.F) && playerData.durum == 1 && other.GetComponent<PlayerData>().durum != -10)
-        { 
-            other.GetComponent<playerControler>().botDead();
+        {
             knifeAnim();
+            sonraki = other.gameObject;
         }
 
     }
