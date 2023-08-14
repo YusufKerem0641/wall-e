@@ -6,9 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/bolum_1 1.unity
+    guid: 385ddbc7070120b44a220da9628cdbeb
+  - enabled: 0
     path: Assets/Scenes/bolumg.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/bolumh.unity
     guid: 84ec12d3c1222d84cb35256282f4276b
   m_configObjects: {}
